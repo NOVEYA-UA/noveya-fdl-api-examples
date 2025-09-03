@@ -34,3 +34,10 @@ npm run fc
 - `schemas/fdl_code_parser.schema.json` — strict schema for normalizing symbolic codes (`commands[]`)
 - `python/examples` & `node/examples` — runnable examples
 - `python/fdl/light_guard.py` — lightweight pre-processor
+
+  ## Design decisions (confirmed with OpenAI)
+
+- **Baseline (one-shot normalization/analysis):** Responses API + `response_format: { type: "json_schema", strict: true }`.
+- **Orchestration & multi-tool:** Function Calling with `tools`, explicit `tool_choice`, `strict: true`.
+- **Schema practicality (strict mode):** target depth 3–5 levels; typical output size ~20–50 KB. For deeper/variable data, split into modules or group rare/experimental fields under `"experimental": {...}`.
+- **Forward compatibility:** new fields (`glyph_map`, `musical_key`, `astro_bindings`) are optional or placed in `"experimental"` to preserve backward compatibility.

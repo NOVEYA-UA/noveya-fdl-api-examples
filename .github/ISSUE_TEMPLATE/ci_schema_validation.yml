@@ -1,0 +1,20 @@
+name: ci: schema validation & lint
+description: Track CI tasks for schema validation and code hygiene
+title: "ci: schema validation & lint"
+labels: ["ci"]
+body:
+  - type: checkboxes
+    id: tasks
+    attributes:
+      label: Planned tasks
+      options:
+        - label: Python jsonschema validation for examples & goldens
+        - label: Node ajv validation (optional)
+        - label: Lint (ruff/flake8 for Python; eslint for Node) — minimal rules
+        - label: Pre-commit hook for JSON formatting
+        - label: CI matrix for Python/Node example runs
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      placeholder: Tooling versions, environment notes, or blockers.

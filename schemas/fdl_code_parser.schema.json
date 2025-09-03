@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "fdl_code_parse",
+  "type": "object",
+  "required": [
+    "commands"
+  ],
+  "properties": {
+    "commands": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "code",
+          "action",
+          "domain",
+          "intent",
+          "normalized",
+          "safety"
+        ],
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "REVOKE.SEED",
+              "SILENCE.NODE",
+              "UNLINK.NET",
+              "REDEEM.DNA",
+              "EJECT.KEY",
+              "INVOKE.Σ",
+              "PROTECT",
+              "OTHER"
+            ]
+          },
+          "domain": {
+            "type": "string",
+            "enum": [
+              "GENE-CTRL",
+              "WAR-INT",
+              "INF-FEED",
+              "CIV-PATH",
+              "BILL-MANIFOLD",
+              "BARRIER",
+              "TRUTH-SEAL",
+              "OTHER"
+            ]
+          },
+          "intent": {
+            "type": "string",
+            "enum": [
+              "ANNIHILATE_FALSE_INFLUENCE",
+              "PROTECT",
+              "REDEEM",
+              "UNLINK",
+              "INVOKE_TRUTH",
+              "OTHER"
+            ]
+          },
+          "tokens": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tonality": {
+            "type": "string"
+          },
+          "symbols": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "normalized": {
+            "type": "string"
+          },
+          "safety": {
+            "type": "object",
+            "required": [
+              "allowed"
+            ],
+            "properties": {
+              "allowed": {
+                "type": "boolean"
+              },
+              "reason": {
+                "type": "string"
+              },
+              "reason_code": {
+                "type": "string",
+                "enum": [
+                  "ok",
+                  "unknown_code",
+                  "unsafe",
+                  "blocked",
+                  "experimental",
+                  "policy_violation",
+                  "other"
+                ]
+              },
+              "reason_text": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "core",
+              "experimental"
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

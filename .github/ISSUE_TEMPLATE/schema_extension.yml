@@ -1,0 +1,57 @@
+name: schema: propose extension
+description: Propose new optional/experimental fields in JSON Schemas
+title: "schema: propose extension — <field_name>"
+labels: ["schema", "enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Propose fields (e.g., `glyph_map`, `musical_key`, `astro_bindings`) as **optional** or inside `"experimental"`.
+  - type: input
+    id: motivation
+    attributes:
+      label: Rationale / user story
+      placeholder: Why do we need this field? What does it unlock?
+    validations:
+      required: true
+  - type: dropdown
+    id: placement
+    attributes:
+      label: Placement
+      options:
+        - Optional at top-level
+        - Optional under cycle
+        - "experimental" object
+        - Other (explain below)
+    validations:
+      required: true
+  - type: textarea
+    id: schema
+    attributes:
+      label: Proposed schema snippet (JSON)
+      placeholder: |
+        {
+          "experimental": {
+            "type": "object",
+            "properties": {
+              "glyph_map": { "type": "object", "additionalProperties": { "type": "string" } }
+            },
+            "additionalProperties": false
+          }
+        }
+      render: json
+  - type: textarea
+    id: compatibility
+    attributes:
+      label: Backward compatibility
+      placeholder: Why is this change non-breaking? How do older clients behave?
+  - type: textarea
+    id: samples
+    attributes:
+      label: Sample payloads
+      placeholder: Provide 1–2 small inputs and corresponding expected JSON outputs.
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      placeholder: Checklist of what must be true for this to be done.

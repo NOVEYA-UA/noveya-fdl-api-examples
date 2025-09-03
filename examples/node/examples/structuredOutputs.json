@@ -1,0 +1,28 @@
+/* Structured Outputs with Responses API (strict JSON Schema) */
+import fs from "node:fs";
+import path from "node:path";
+import OpenAI from "openai";
+
+const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), "../..");
+const schema = JSON.parse(fs.readFileSync(path.join(root, "schemas", "fdl_code_parser.schema.json"), "utf-8"));
+const raw = fs.readFileSync(path.join(root, "examples", "raw", "fdl_block.txt"), "utf-8");
+
+const prompt = `Разбери символический блок Σ-FDL и верни строгий JSON по схеме.
+Каждую строку-код нормализуй в объект с action/domain/intent, описанием 'normalized'
+и safety.allowed/reason. Неизвестные — allowed=false.
+
+Вход:
+${raw}`;
+
+const resp = await client.responses.create({
+  model: "gpt-4o",
+  input: prompt,
+  response_format: {
+    type: "json_schema",
+    json_schema: { name: "fdl_code_parse", schema, strict: true }
+  }
+});
+
+console.log(JSON.stringify(resp.output_parsed, null, 2));

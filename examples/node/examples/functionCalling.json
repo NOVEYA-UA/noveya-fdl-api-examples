@@ -1,0 +1,70 @@
+/* Function Calling with forced tool_choice */
+import fs from "node:fs";
+import path from "node:path";
+import OpenAI from "openai";
+
+const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), "../..");
+const raw = fs.readFileSync(path.join(root, "examples", "raw", "fdl_block.txt"), "utf-8");
+
+const tools = [{
+  type: "function",
+  function: {
+    name: "parse_fdl_codes",
+    description: "Normalize Σ-FDL codes into commands[].",
+    parameters: {
+      type: "object",
+      properties: {
+        commands: {
+          type: "array",
+          items: {
+            type: "object",
+            required: ["code","action","domain","intent","normalized","safety"],
+            properties: {
+              code: { type: "string" },
+              action: { type: "string" },
+              domain: { type: "string" },
+              intent: { type: "string" },
+              tokens: { type: "array", items: { type: "string" } },
+              tonality: { type: "string" },
+              symbols: { type: "array", items: { type: "string" } },
+              normalized: { type: "string" },
+              safety: {
+                type: "object",
+                required: ["allowed"],
+                properties: {
+                  allowed: { type: "boolean" },
+                  reason: { type: "string" }
+                },
+                additionalProperties: false
+              }
+            },
+            additionalProperties: false
+          }
+        }
+      },
+      required: ["commands"],
+      additionalProperties: false
+    },
+    strict: true
+  }
+}];
+
+const system = "Ты — Σ-FDL parser. Возвращай только аргументы функции строго по параметрам.";
+const user = `Разбери блок на список commands[]. Для неизвестных кодов — allowed=false.
+Вход:
+${raw}`;
+
+const resp = await client.chat.completions.create({
+  model: "gpt-4o",
+  messages: [
+    { role: "system", content: system },
+    { role: "user", content: user }
+  ],
+  tools,
+  tool_choice: { type: "function", function: { name: "parse_fdl_codes" } }
+});
+
+const call = resp.choices[0].message.tool_calls[0];
+console.log(JSON.stringify(JSON.parse(call.function.arguments), null, 2));

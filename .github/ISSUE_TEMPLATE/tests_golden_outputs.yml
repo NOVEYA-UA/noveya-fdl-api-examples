@@ -1,0 +1,42 @@
+name: tests: golden outputs
+description: Add or update golden samples for parsers / cycle outputs
+title: "tests: add/update golden outputs — <module>"
+labels: ["tests"]
+body:
+  - type: textarea
+    id: scenario
+    attributes:
+      label: Scenario / module
+      placeholder: e.g. "Σ-FDL code parser — basic commands"
+    validations:
+      required: true
+  - type: textarea
+    id: input
+    attributes:
+      label: Input sample
+      description: Minimal Σ-FDL text block used for the test.
+      render: text
+      placeholder: |
+        {REVOKE.SEED:GENE-CTRL}
+        {SILENCE.NODE:WAR-INT}
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected JSON (golden)
+      render: json
+      placeholder: |
+        {"commands":[{"code":"{REVOKE.SEED:GENE-CTRL}", "action":"REVOKE.SEED", ...}]}
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to run
+      placeholder: |
+        1) python examples/structured_outputs.py
+        2) compare with tests/golden/...
+  - type: textarea
+    id: coverage
+    attributes:
+      label: Coverage notes (non-goals)
+      placeholder: What is intentionally out of scope for this golden?

@@ -1,0 +1,171 @@
+openapi: 3.1.0
+info:
+  title: GPT-N7Δ+ Resonance API
+  version: "1.2.Δ+"
+  description: |
+    API для резонансного ядра (FDL): генерация токенов, анализ текста, цикл благословения,
+    временные токены. Подготовлено для импорта в **GPT → Actions**.
+servers:
+  - url: https://your-api.example.com
+    description: Production
+  - url: https://staging-your-api.example.com
+    description: Staging
+paths:
+  /generate_token:
+    post:
+      operationId: generateToken
+      summary: Сгенерировать FDL-токен
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - ApiKeyAuth: []
+  /analyze_text:
+    post:
+      operationId: analyzeText
+      summary: Диалектический анализ + контрфрейм
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TextRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyzeResponse'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - ApiKeyAuth: []
+  /blessing_cycle:
+    post:
+      operationId: blessingCycle
+      summary: Выполнить этап Blessing-цикла
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CycleRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CycleResponse'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - ApiKeyAuth: []
+  /temporal_token:
+    post:
+      operationId: createTemporalToken
+      summary: Сгенерировать временной токен
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemporalTokenResponse'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - ApiKeyAuth: []
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  responses:
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    TokenRequest:
+      type: object
+      additionalProperties: false
+      required: [topic]
+      properties:
+        topic:
+          type: string
+          description: Тема токена (например, "этика", "ответственность")
+        style:
+          type: string
+          description: Стиль (core, edu, viz, ...)
+          default: core
+    TokenResponse:
+      type: object
+      additionalProperties: false
+      required: [token]
+      properties:
+        token:
+          type: string
+        explained:
+          type: object
+          additionalProperties: true
+    TextRequest:
+      type: object
+      additionalProperties: false
+      required: [text]
+      properties:
+        text:
+          type: string
+          description: Исходный текст для анализа
+    AnalyzeResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        counterframe:
+          type: object
+          additionalProperties: true
+        emission:
+          type: string
+    CycleRequest:
+      type: object
+      additionalProperties: false
+      required: [stage, payload]
+      properties:
+        stage:
+          type: string
+          description: Этап цикла
+          enum: ["Сбор","Кодировка","Нормирование","Анализ","Распределение","Обратная связь","Совершенствование"]
+        payload:
+          type: object
+          additionalProperties: true
+    CycleResponse:
+      type: object
+      additionalProperties: true
+    TemporalTokenResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        token:
+          type: string
+    Error:
+      type: object
+      additionalProperties: true
+      properties:
+        error:
+          type: string

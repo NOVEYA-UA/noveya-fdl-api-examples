@@ -6,9 +6,9 @@ info:
     API для резонансного ядра (FDL): генерация токенов, анализ текста, цикл благословения,
     временные токены. Подготовлено для импорта в **GPT → Actions**.
 servers:
-  - url: https://your-api.example.com
+  - url: https://github.com/NOVEYA-UA/noveya-fdl-api-examples/blob/main/noveya-fdl-api-examples/openapi.yaml
     description: Production
-  - url: https://staging-your-api.example.com
+  - url: https://github.com/NOVEYA-UA/noveya-fdl-api-examples/blob/main/noveya-fdl-api-examples/openapi.yaml
     description: Staging
 paths:
   /generate_token:
